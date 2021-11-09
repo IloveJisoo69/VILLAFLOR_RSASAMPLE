@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <title>VILLAFLOR RSA SAMPLE</title>
+    </header>
+    
+    <body>
+        <script>
+            var og = "ENCRYPTION";
+            var og2 = "RASTAMAN";
+            var p = 11;
+            var q = 13;
+
+            document.write("Please check Console");
+
+            function encrypt(message, p, q){
+                console.log("Original message: " + message);
+                let n = p*q;
+                let z = (p-1)*(q-1);
+                let e = 1;
+                let d = 1;
+                while(z%e == 0){
+                    e++;
+                }
+                while((e*d-1)%z != 0){
+                    d++;
+                }
+
+                message = publicKey(message, n, e);
+                console.log("Encrypted message: " + message);
+                return message;
+            }
+
+            function decrypt(message, p, q){
+                console.log("Original message: " + message);
+                let n = p*q;
+                let z = (p-1)*(q-1);
+                let e = 1;
+                let d = 1;
+                while(z%e == 0){
+                    e++;
+                }
+                while((e*d-1)%z != 0){
+                    d++;
+                }
+
+                message = privateKey(message, n, d);
+                console.log("Decrypted message: " + message);
+            }
+            
+            function publicKey(message, n, e){
+                let encrypted = "";
+                    for (i = 0; i < message.length; i++) {
+                        let m = message.charCodeAt(i)**e;
+                        if (m % n < 32) {
+                            encrypted += String.fromCharCode((m % n) + 32);
+                        } else if (m % n > 126) {
+                            encrypted += String.fromCharCode((m % n) - 44);
+                        } else {
+                            encrypted += String.fromCharCode(m % n);
+                        }
+                    }
+                return encrypted;
+            }
+
+            function privateKey(message, n, d){
+                let decrypted = "";
+                    for (i = 0; i < message.length; i++) {
+                        let m = message.charCodeAt(i)**d;
+                        if (m % n < 32) {
+                            decrypted += String.fromCharCode((m % n) + 32);
+                        } else if (m % n > 126) {
+                            decrypted += String.fromCharCode((m % n) - 44);
+                        } else {
+                            decrypted += String.fromCharCode(m % n);
+                        }
+                    }
+                return decrypted;
+            }
+
+            let dec = encrypt(og,p,q);
+            decrypt(dec,p,q);
+            let dec2 = encrypt(og2,p,q);
+            decrypt(dec2,p,q);
+        </script>
+    </body>
+</html>
